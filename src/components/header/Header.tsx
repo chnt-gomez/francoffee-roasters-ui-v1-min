@@ -1,21 +1,17 @@
-import { useState } from 'react'
-import { Button } from './ui/button';
-import { ShoppingBag } from 'lucide-react';
 
+import { Button } from '../ui/button'
+import { ShoppingBag } from 'lucide-react'
 
-
-export const CustomHeader = () => {
-
-    const [cartCount, setCartCount] = useState(0);
-    const onCartOpen = () => {}
-
-
+interface Props {
+    cartCount: number,
+    onCartOpen: () => void
+}
+const Header= ({cartCount, onCartOpen} : Props ) => {
   return (
-    <div>
-        <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <h1 className="font-serif text-2xl tracking-tight text-foreground">
-          Francofee
+          Francoffee Logo
         </h1>
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#products" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
@@ -44,9 +40,7 @@ export const CustomHeader = () => {
         </Button>
       </div>
     </header>
-      
-    </div>
   )
 }
 
-export default CustomHeader
+export default Header
