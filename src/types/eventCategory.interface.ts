@@ -1,0 +1,1 @@
+export type EventCategory = "workshop" | "tasting" | "meetup" | "sale" | "other"

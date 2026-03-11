@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router';
 import LandingPage from './pages/landing/LandingPage';
 import StorePage from './pages/store/StorePage';
-import StoreLayout from './layouts/StoreLayout';
+import StoreLayout from './layouts/DefaultLayout';
+import EventsPage from './pages/events/EventsPage';
 
 export const appRouter= createBrowserRouter([
     {
@@ -15,7 +16,17 @@ export const appRouter= createBrowserRouter([
             {
                 index: true,
                 element: <StorePage />
-            }
+            },
+        ]
+    },
+    {
+        path: '/eventos',
+        element: <StoreLayout />,
+        children: [
+            {
+                index: true,
+                element: <EventsPage />
+            },
         ]
     }
 ]);
