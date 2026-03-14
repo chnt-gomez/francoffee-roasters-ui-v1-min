@@ -93,7 +93,7 @@ const CreateEventDialog = ({open, onOpenChange, selectedDate, onCreateEvent, tim
             <div className="grid grid-cols-2 gap-4">
               <Field>
                 <FieldLabel>Time</FieldLabel>
-                <Select value={time} onValueChange={setTime} required>
+                <Select value={time} onValueChange={(v) => setTime(v as string)} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>

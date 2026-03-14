@@ -1,0 +1,1 @@
+export type ServiceType = "training" | "custom-order" | "consultation"

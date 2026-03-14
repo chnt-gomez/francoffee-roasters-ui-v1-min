@@ -1,10 +1,11 @@
 import CartSheet from '@/components/cart-sheet/CartSheet';
 import Header from '@/components/header/Header'
+import Footer from '@/pages/store/components/Footer';
 import type { CartItem } from '@/types/cart.interface';
 import { useState } from 'react'
 import { Outlet } from 'react-router'
 
-const StoreLayout = () => {
+const DefaultLayout = () => {
 
   const [cartCount, setCartCount] = useState(4);
   const [cartOpen, setCartOpen] = useState(false);
@@ -36,16 +37,17 @@ const StoreLayout = () => {
     <div className="flex min-h-screen flex-col">
        <Header cartCount={cartCount} onCartOpen={() => setCartOpen(true)} />
         <Outlet />
-        <CartSheet
-        open={cartOpen}
-        onOpenChange={setCartOpen}
-        items={cartItems}
-        onIncrement={incrementItem}
-        onDecrement={decrementItem}
-        onRemove={removeItem}
-      />
+        <Footer />
+          <CartSheet
+          open={cartOpen}
+          onOpenChange={setCartOpen}
+          items={cartItems}
+          onIncrement={incrementItem}
+          onDecrement={decrementItem}
+          onRemove={removeItem}
+        />
     </div>
   )
 }
 
-export default StoreLayout
+export default DefaultLayout

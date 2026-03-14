@@ -1,6 +1,5 @@
-import HeroBanner from '@/components/hero/HeroBanner'
+import HeroBanner from '@/pages/store/components/HeroBanner'
 import ProductGrid from '@/components/product/ProductGrid'
-import Footer from './components/Footer'
 import InfoSection from './components/InfoSection'
 
 const StorePage = () => {
@@ -14,7 +13,6 @@ const StorePage = () => {
         <ProductGrid onAddToCart={addToCart}/>
         <InfoSection />
       </main>
-      <Footer />
     </div>
   )
 }

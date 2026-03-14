@@ -1,6 +1,7 @@
 
+import { Link } from 'react-router'
 import { Button } from '../ui/button'
-import { ShoppingBag } from 'lucide-react'
+import { Calendar, ShoppingBag, Store } from 'lucide-react'
 
 interface Props {
     cartCount: number,
@@ -14,15 +15,20 @@ const Header= ({cartCount, onCartOpen} : Props ) => {
           Francoffee Logo
         </h1>
         <nav className="hidden items-center gap-8 md:flex">
-          <a href="#products" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-            Shop
-          </a>
-          <a href="#about" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-            About
-          </a>
-          <a href="#contact" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-            Contact
-          </a>
+        
+            <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <span className="hidden sm:inline">Tienda</span>
+            </Link>
+            <Link to="/eventos" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <span className="hidden sm:inline">Eventos</span>
+            </Link>
+            
+          <Link to="/atencion" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            Atención Personalizada
+          </Link>
+          <Link to="/contacto" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            Contacto
+          </Link>
         </nav>
         <Button
           variant="ghost"

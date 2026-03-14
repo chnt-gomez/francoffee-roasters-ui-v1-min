@@ -3,16 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import type { Event } from "@/types/event.interface"
 import { ArrowLeft, Plus } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import EventsList from "./EventsList"
-
-interface Props {
-    events: Event[],
-    selectedDate: Date | undefined,
-    onAddEvent: () => void,
-    onSelectDate: (date: Date | undefined) => void,
-    onDeleteEvent: (id: string) => void
-}
+import CreateEventDialog from "./CreateEventDialog"
+import type { EventCategory } from "@/types/eventCategory.interface"
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
@@ -38,9 +32,88 @@ function isSameDay(a: Date, b: Date): boolean {
   )
 }
 
-const EventsCalendar = ({events, selectedDate, onSelectDate, onAddEvent, onDeleteEvent}: Props) => {
+
+const INITIAL_EVENTS: Event[] = [
+  {
+    id: "1",
+    title: "Leather Care Workshop",
+    date: new Date(2026, 2, 15),
+    time: "02:00 PM",
+    location: "Francofee Studio",
+    description: "Learn how to care for and maintain your leather goods with our master craftsman.",
+    category: "workshop",
+    attendees: 12,
+  },
+  {
+    id: "2",
+    title: "Spring Collection Preview",
+    date: new Date(2026, 2, 20),
+    time: "06:00 PM",
+    location: "Francofee Flagship Store",
+    description: "Be the first to see our new spring collection with exclusive early access to shop.",
+    category: "sale",
+    attendees: 45,
+  },
+  {
+    id: "3",
+    title: "Coffee Tasting Event",
+    date: new Date(2026, 2, 22),
+    time: "10:00 AM",
+    location: "Partner Roastery",
+    description: "Sample artisanal coffees paired with our ceramic pour-over collection.",
+    category: "tasting",
+    attendees: 20,
+  },
+]
+
+const CATEGORY_CONFIG: Record<EventCategory, { label: string; color: string }> = {
+  workshop: { label: "Workshop", color: "bg-amber-100 text-amber-800" },
+  tasting: { label: "Tasting", color: "bg-rose-100 text-rose-800" },
+  meetup: { label: "Meetup", color: "bg-sky-100 text-sky-800" },
+  sale: { label: "Sale", color: "bg-emerald-100 text-emerald-800" },
+  other: { label: "Other", color: "bg-stone-100 text-stone-800" },
+}
+
+const TIME_SLOTS = [
+  "09:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "01:00 PM",
+  "02:00 PM",
+  "03:00 PM",
+  "04:00 PM",
+  "05:00 PM",
+  "06:00 PM",
+  "07:00 PM",
+]
+
+
+
+const EventsCalendar = () => {
+
+    function handleDeleteEvent(id: string) {
+    setEvents((prev) => prev.filter((e) => e.id !== id))
+  }
+
+  function handleAddEvent() {
+    setCreateDialogOpen(true)
+  }
+
+    function handleCreateEvent(event: Event) {
+    setEvents((prev) => [...prev, event])
+  }
+
+  function handleSelectDate(date: Date | undefined) {
+    setSelectedDate(date);
+  }
+
+     const [events, setEvents] = useState<Event[]>(INITIAL_EVENTS)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+
   const eventDates = useMemo(() => {
-      return events.map((e) => e.date)
+      return INITIAL_EVENTS.map((e) => e.date)
     }, [events])
   
     return (
@@ -52,7 +125,7 @@ const EventsCalendar = ({events, selectedDate, onSelectDate, onAddEvent, onDelet
             <Calendar
               mode="single"
               selected={selectedDate}
-              onSelect={onSelectDate}
+              onSelect={handleSelectDate}
               modifiers={{
                 hasEvent: eventDates,
               }}
@@ -62,7 +135,7 @@ const EventsCalendar = ({events, selectedDate, onSelectDate, onAddEvent, onDelet
               className="rounded-md"
             />
           </div>
-          <Button onClick={onAddEvent} className="w-full gap-2" disabled={!selectedDate}>
+          <Button onClick={handleAddEvent} className="w-full gap-2" disabled={!selectedDate}>
             <Plus className="h-4 w-4" />
             Add Event {selectedDate && `on ${formatShortDate(selectedDate)}`}
           </Button>
@@ -70,7 +143,7 @@ const EventsCalendar = ({events, selectedDate, onSelectDate, onAddEvent, onDelet
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onSelectDate(undefined)}
+              onClick={() => handleSelectDate(undefined)}
               className="gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -92,10 +165,11 @@ const EventsCalendar = ({events, selectedDate, onSelectDate, onAddEvent, onDelet
           <EventsList
             events={events}
             selectedDate={selectedDate}
-            onDeleteEvent={onDeleteEvent}
+            onDeleteEvent={handleDeleteEvent}
           />
         </div>
       </div>
+      <CreateEventDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} selectedDate={selectedDate} onCreateEvent={handleCreateEvent} categoryConfig={CATEGORY_CONFIG} timeSlots={TIME_SLOTS}/>
     </section>
   )
 }
