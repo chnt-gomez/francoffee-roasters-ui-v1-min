@@ -20,7 +20,7 @@ const Header= ({cartCount, onCartOpen} : Props ) => {
               <span className="hidden sm:inline">Tienda</span>
             </Link>
             <Link to="/eventos" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              <span className="hidden sm:inline">Eventos</span>
+              <span className="hidden sm:inline">Eventos y Catas</span>
             </Link>
             
           <Link to="/atencion" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
