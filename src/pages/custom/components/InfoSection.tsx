@@ -1,5 +1,5 @@
 import type { ServiceType } from '@/types/serviceType.interface'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Banner from './Banner'
 import StatsBanner from './StatsBanner'
 import ProcessBanner from './ProcessBanner'

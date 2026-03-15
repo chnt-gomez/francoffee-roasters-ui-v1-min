@@ -16,7 +16,8 @@ const DefaultLayout = () => {
       prev.map((item) =>
         item.product.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
-    )
+    );
+    setCartCount((prev) => prev + 1);
   }
 
   const decrementItem = (id: number) => {

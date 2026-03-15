@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router'
 import { Button } from '../ui/button'
-import { Calendar, ShoppingBag, Store } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 
 interface Props {
     cartCount: number,
