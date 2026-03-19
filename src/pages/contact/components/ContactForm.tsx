@@ -85,7 +85,13 @@ const ContactForm = () => {
             <FieldLabel>Subject</FieldLabel>
             <Select
               value={form.subject}
-              onValueChange={(v) => setForm({ ...form, subject: v })}
+              onValueChange={(v) => 
+              {
+                if (!v) {
+                  v = "other"
+                }
+                setForm({ ...form, subject:  v})}
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a topic" />
