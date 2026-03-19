@@ -5,6 +5,7 @@ import DefaultLayout from './layouts/DefaultLayout';
 import EventsPage from './pages/events/EventsPage';
 import IndexLayout from './layouts/IndexLayout';
 import CustomSupportPage from './pages/custom/CustomSupportPage';
+import ContactPage from './pages/contact/ContactPage';
 
 export const appRouter= createBrowserRouter([
     {
@@ -33,6 +34,10 @@ export const appRouter= createBrowserRouter([
             {
                 path: '/atencion',
                 element: <CustomSupportPage />
+            },
+            {
+                path: '/contacto',
+                element: <ContactPage />
             }
         ],
     }
