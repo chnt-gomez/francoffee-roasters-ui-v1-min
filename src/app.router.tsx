@@ -6,6 +6,7 @@ import EventsPage from './pages/events/EventsPage';
 import IndexLayout from './layouts/IndexLayout';
 import CustomSupportPage from './pages/custom/CustomSupportPage';
 import ContactPage from './pages/contact/ContactPage';
+import CheckoutPage from './pages/checkout/CheckoutPage';
 
 export const appRouter= createBrowserRouter([
     {
@@ -38,7 +39,12 @@ export const appRouter= createBrowserRouter([
             {
                 path: '/contacto',
                 element: <ContactPage />
-            }
+            },
         ],
+    },
+    {
+        path: '/checkout',
+        element: <CheckoutPage />,
+        
     }
 ]);

@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 const ContactForm = () => {
 
     const [form, setForm] = useState<ContactFormType>({
-        name: "",
+      name: "",
       email: "",
       phone: "",
       subject: "",
