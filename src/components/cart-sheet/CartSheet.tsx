@@ -5,19 +5,19 @@ import type { CartItem } from "@/types/cart.interface"
 import CartItemRow from "./CartItemRow"
 
 interface Props {
-    open: boolean,
-    onOpenChange: (open: boolean) => void,
-    items: CartItem[],
-    onIncrement: (id: number) => void,
-    onDecrement: (id: number) => void,
-    onRemove: (id: number) => void
+  open: boolean,
+  onOpenChange: (open: boolean) => void,
+  items: CartItem[],
+  onIncrement: (id: string) => void,
+  onDecrement: (id: string) => void,
+  onRemove: (id: string) => void
 }
 
-const CartSheet = ({open, onOpenChange, items, onIncrement, onDecrement, onRemove} : Props) => {
-  
+const CartSheet = ({ open, onOpenChange, items, onIncrement, onDecrement, onRemove }: Props) => {
+
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
-    return (
+  return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="flex w-full flex-col sm:max-w-md">
         <SheetHeader>

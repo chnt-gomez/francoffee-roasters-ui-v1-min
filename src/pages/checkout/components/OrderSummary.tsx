@@ -10,7 +10,7 @@ import { useCheckout } from '../context/CheckoutContext'
 
 const OrderSummary = () => {
 
-  const { handleConfirmCheckout, isSubmitting, cartItems, subtotal, tax, shipping, errors, total } = useCheckout();
+  const { handleConfirmCheckout, isSubmitting, cartItems, subtotal, errors, total } = useCheckout();
 
   return (
 
@@ -75,11 +75,11 @@ const OrderSummary = () => {
                     <Truck className="h-4 w-4" />
                     Shipping
                   </span>
-                  <span className="text-foreground">${shipping.toFixed(2)}</span>
+                  <span className="text-foreground">0.00</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Tax (8%)</span>
-                  <span className="text-foreground">${tax.toFixed(2)}</span>
+                  <span className="text-foreground">0.00</span>
                 </div>
               </div>
 

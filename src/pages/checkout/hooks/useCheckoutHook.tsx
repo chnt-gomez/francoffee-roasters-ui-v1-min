@@ -87,8 +87,6 @@ const useCheckoutForm = () => {
   const [deliveryLocation, setDeliveryLocation] = useState<DeliveryLocation | null>(null)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [tax, setTax] = useState(0);
-  const [shipping, setShipping] = useState(0);
   const [deliveryNotes, setDeliveryNotes] = useState('');
 
   const subtotal = useMemo(() => {
@@ -233,8 +231,6 @@ const useCheckoutForm = () => {
     errors,
     isSubmitting,
     guestInfo,
-    tax,
-    shipping,
     address,
 
     subtotal,
