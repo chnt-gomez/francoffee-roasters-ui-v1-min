@@ -8,6 +8,7 @@ import CheckoutForm from "./components/CheckoutForm"
 import CheckoutFooter from "./components/CheckoutFooter"
 import OrderSummary from "./components/OrderSummary"
 import { CheckoutProvider } from "./context/CheckoutContext"
+import { Toaster } from "sonner"
 
 export default function CheckoutPage() {
 
@@ -32,6 +33,7 @@ export default function CheckoutPage() {
           </div>
         </main>
         <CheckoutFooter />
+        <Toaster />
       </div>
     </CheckoutProvider>
   )

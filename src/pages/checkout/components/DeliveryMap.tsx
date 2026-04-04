@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import 'leaflet/dist/leaflet.css';
-import { Field, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import useDeliveryMap from '../hooks/useDeliveryMap';
 import { useEffect } from 'react';
 import { useCheckout } from '../context/CheckoutContext';
@@ -31,6 +31,7 @@ const RecenterMap = ({ location }: { location: { lat: number; lng: number } }) =
 const DeliveryMap = () => {
 
   const {
+    errors,
     address,
     handleAddressChange
   } = useCheckout();
@@ -59,11 +60,13 @@ const DeliveryMap = () => {
           <Field>
             <FieldLabel htmlFor="address">Dirección</FieldLabel>
             <Input
+              id="address"
               value={address}
               onChange={(e) => handleAddressChange(e.target.value)}
               placeholder="Calle, numero, colonia..."
-              className="border-accent/20"
+              className={errors.address ? "border-destructive" : ""}
             />
+            {errors.address && <FieldError>{errors.address}</FieldError>}
           </Field>
         </div>
 

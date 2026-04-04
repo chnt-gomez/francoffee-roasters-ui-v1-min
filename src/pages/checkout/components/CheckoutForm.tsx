@@ -31,7 +31,7 @@ const CheckoutForm = () => {
               className="w-full gap-2"
               size="lg"
               onClick={handleConfirmCheckout}
-              disabled={isSubmitting || cartItems.length === 0 || Object.keys(errors).length > 0}
+              disabled={isSubmitting || cartItems.length === 0}
             >
               {isSubmitting ? (
                 <>

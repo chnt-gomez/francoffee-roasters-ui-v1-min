@@ -99,7 +99,7 @@ const OrderSummary = () => {
           className="w-full gap-2"
           size="lg"
           onClick={handleConfirmCheckout}
-          disabled={isSubmitting || cartItems.length === 0 || Object.keys(errors).length > 0}
+          disabled={isSubmitting || cartItems.length === 0}
         >
           {isSubmitting ? (
             <>
@@ -117,7 +117,7 @@ const OrderSummary = () => {
           <p className="mt-2 text-center text-sm text-destructive">{errors.cart}</p>
         )}
         <p className="mt-3 text-center text-xs text-muted-foreground">
-          You will be redirected to our secure payment processor
+          Continuarás el pago a traves de nuestro enlace seguro
         </p>
       </div>
     </div>

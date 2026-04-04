@@ -1,6 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
+import { useCheckout } from "../context/CheckoutContext";
+import { toast } from "sonner";
 
 const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
+
+    const { handleDeliveryLocationChanged } = useCheckout();
 
     const [mapLoaded, setMapLoaded] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
@@ -9,7 +13,6 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
             lat: 19.0480,
             lng: -98.2608,
         });
-    const [locationError, setLocationError] = useState('');
     const handleMapMoveEnd = useCallback((coords: { lat: number; lng: number }) => {
         // Use functional update to avoid dependency on 'location'
         setLocation(prev => {
@@ -20,7 +23,8 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
             }
             return { ...prev, ...coords };
         });
-    }, []);
+        handleDeliveryLocationChanged({ lat: coords.lat, lng: coords.lng });
+    }, [handleDeliveryLocationChanged]);
 
     const reverseGeocode = async (lat: number, lng: number) => {
         try {
@@ -37,10 +41,8 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
 
     const handleUseCurrentLocation = useCallback(() => {
         setIsLocating(true);
-        setLocationError('');
-
         if (!navigator.geolocation) {
-            setLocationError("Tu navegador no soporta geolocalización.");
+            toast.error("Tu navegador no soporta geolocalización.", { position: "bottom-right" });
             setIsLocating(false);
             return;
         }
@@ -53,6 +55,7 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
                     onAddressFound(addr);
                 }
                 setLocation({ lat: latitude, lng: longitude });
+                handleDeliveryLocationChanged({ lat: latitude, lng: longitude });
                 setIsLocating(false);
             },
             (error) => {
@@ -64,14 +67,14 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
                         message = "Permiso denegado. Por favor, habilita la ubicación en tu navegador.";
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = "La ubicación no está disponible (verifica tu conexión Wi-Fi).";
+                        message = "La ubicación no está disponible. Verifica tu conexión a internet).";
                         break;
                     case error.TIMEOUT:
-                        message = "Se agotó el tiempo de espera. Intenta mover el mapa manualmente.";
+                        message = "Búsqueda automática falló. Intenta mover el mapa manualmente.";
                         break;
                 }
 
-                setLocationError(message);
+                toast.error(message, { position: "bottom-right" });
                 setIsLocating(false);
             },
             {
@@ -80,7 +83,7 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
                 maximumAge: 0
             }
         );
-    }, [onAddressFound]);
+    }, [onAddressFound, handleDeliveryLocationChanged]);
 
     useEffect(() => {
         const timer = setTimeout(() => setMapLoaded(true), 500);
