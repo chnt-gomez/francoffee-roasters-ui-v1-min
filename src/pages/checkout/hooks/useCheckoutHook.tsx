@@ -95,6 +95,12 @@ const useCheckoutForm = () => {
     )
   }, [cartItems])
 
+  const handleClearCart = () => {
+    setCartItems([]);
+    setErrors({});
+  }
+
+
   // 2. Memoize Total 
   // Depends on subtotal (which depends on cartItems)
   const total = useMemo(() => {
@@ -233,10 +239,12 @@ const useCheckoutForm = () => {
     guestInfo,
     address,
 
+
     subtotal,
     total,
 
     validateForm,
+    handleClearCart,
     handleConfirmCheckout,
     handleGuestInfoChange,
     handleAddressChange,

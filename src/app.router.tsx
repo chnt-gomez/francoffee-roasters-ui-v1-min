@@ -7,21 +7,23 @@ import IndexLayout from './layouts/IndexLayout';
 import CustomSupportPage from './pages/custom/CustomSupportPage';
 import ContactPage from './pages/contact/ContactPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
+import CheckoutFailedPage from './pages/checkout/CheckoutFailedPage';
+import CheckoutSuccessPage from './pages/checkout/CheckoutSuccessPage';
 
-export const appRouter= createBrowserRouter([
+export const appRouter = createBrowserRouter([
     {
-        path:"/index",
+        path: "/index",
         element: <IndexLayout />,
         children: [
             {
                 index: true,
                 element: <LandingPage />
             }
-            
+
         ]
     },
     {
-        path:'/',
+        path: '/',
         element: <DefaultLayout />,
         children: [
             {
@@ -29,7 +31,7 @@ export const appRouter= createBrowserRouter([
                 element: <StorePage />
             },
             {
-                path:'/eventos',
+                path: '/eventos',
                 element: <EventsPage />
             },
             {
@@ -45,6 +47,13 @@ export const appRouter= createBrowserRouter([
     {
         path: '/checkout',
         element: <CheckoutPage />,
-        
+    },
+    {
+        path: '/checkout/failed',
+        element: <CheckoutFailedPage />
+    },
+    {
+        path: '/checkout/success',
+        element: <CheckoutSuccessPage />
     }
 ]);
