@@ -1,38 +1,13 @@
 import CartSheet from '@/components/cart-sheet/CartSheet';
 import Header from '@/components/header/Header'
 import Footer from '@/pages/store/components/Footer';
-import type { CartItem } from '@/types/cart.interface';
 import { useState } from 'react'
 import { Outlet } from 'react-router'
+import { useCart } from '@/context/CartContext';
 
 const DefaultLayout = () => {
-
-  const [cartCount, setCartCount] = useState(4);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
-
-  const incrementItem = (id: string) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.product.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-    setCartCount((prev) => prev + 1);
-  }
-
-  const decrementItem = (id: string) => {
-    setCartItems((prev) =>
-      prev
-        .map((item) =>
-          item.product.id === id ? { ...item, quantity: item.quantity - 1 } : item
-        )
-        .filter((item) => item.quantity > 0)
-    )
-  }
-
-  const removeItem = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.product.id !== id))
-  }
+  const { cartItems, cartCount, incrementItem, decrementItem, removeItem } = useCart();
 
   return (
     <div className="flex min-h-screen flex-col">

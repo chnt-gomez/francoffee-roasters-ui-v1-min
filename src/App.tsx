@@ -1,11 +1,12 @@
 import { RouterProvider } from 'react-router'
 import { appRouter } from './app.router'
+import { CartProvider } from './context/CartContext'
 
 const App = () => {
   return (
-   <>
-    <RouterProvider router={appRouter} />
-   </>
+    <CartProvider>
+      <RouterProvider router={appRouter} />
+    </CartProvider>
   )
 }
 

@@ -1,6 +1,3 @@
-import { Button } from '../../../components/ui/button'
-import { ArrowRight } from 'lucide-react'
-
 const HeroBanner = () => {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
@@ -14,12 +11,6 @@ const HeroBanner = () => {
         <p className="max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
           A curated collection of handcrafted goods designed to bring warmth, function, and beauty into your daily routine.
         </p>
-        <Button size="lg" className="mt-2 gap-2">
-          <a href="#products">
-            Browse Collection
-            <ArrowRight className="h-4 w-4" />
-          </a>
-        </Button>
       </div>
     </section>
   )

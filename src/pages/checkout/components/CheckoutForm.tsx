@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { CreditCard } from "lucide-react"
+import { CreditCard, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCheckout } from "../context/CheckoutContext";
 
@@ -10,10 +10,18 @@ const CheckoutForm = () => {
     cartItems,
     errors,
     isSubmitting,
+    isLoadingPrices,
     total,
     handleConfirmCheckout
-  } =
-    useCheckout();
+  } = useCheckout();
+
+  if (isLoadingPrices) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   return (
     <>

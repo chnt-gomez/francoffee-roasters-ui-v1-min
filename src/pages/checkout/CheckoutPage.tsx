@@ -9,11 +9,13 @@ import CheckoutFooter from "./components/CheckoutFooter"
 import OrderSummary from "./components/OrderSummary"
 import { CheckoutProvider } from "./context/CheckoutContext"
 import { Toaster } from "sonner"
+import { useCart } from "@/context/CartContext"
 
 export default function CheckoutPage() {
+  const { cartItems } = useCart();
 
   return (
-    <CheckoutProvider>
+    <CheckoutProvider cartItems={cartItems}>
       <div className="flex min-h-screen flex-col bg-background">
         <CheckoutHeader />
         <main className="flex-1 py-8">

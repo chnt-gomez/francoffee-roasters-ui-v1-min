@@ -118,7 +118,7 @@ const DeliveryMap = () => {
 
           <FieldLabel htmlFor='notes'>Notas de entrega (Opcional)</FieldLabel>
           <Input
-            placeholder="Entregar en casa de colr azul junto al portón negro, preguntar por Ignacio..."
+            placeholder="Ayúdanos a encontrar mas rápido tu domicilio con una descripción o si se necesita un acceso para paquetería"
             className="border-accent/20"
           />
         </Field>

@@ -34,8 +34,8 @@ const useDeliveryMap = (onAddressFound?: (addr: string) => void) => {
             );
             const data = await response.json();
             return data.display_name || "";
-        } catch (error) {
-            return "";
+        } catch (err) {
+            console.error("Reverse geocoding failed:", err);
         }
     };
 

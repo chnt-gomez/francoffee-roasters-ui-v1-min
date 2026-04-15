@@ -1,83 +1,13 @@
 import type { CartItem } from '@/types/cart.interface'
 import type { DeliveryLocation } from '@/types/deliveryLocation.interface'
 import type { GuestInfo } from '@/types/guestInfo.interface'
-import type { Product } from '@/types/product.interface'
-import { useMemo, useState } from 'react'
-import axios from "axios";
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { preCheckout } from '@/actions/checkout/pre-checkout.action'
+import { applyCheckout } from '@/actions/checkout/apply-checkout.action'
 
-const ITEMS: Product[] = [
-  {
-    id: "1",
-    name: "Leather Tote Bag",
-    price: 189,
-    image: "/images/product-1.jpg",
-    category: "Accessories",
-    description: "Premium full-grain leather tote with brass hardware.",
-  },
-  {
-    id: "2",
-    name: "Ceramic Pour-Over",
-    price: 64,
-    image: "/images/product-2.jpg",
-    category: "Kitchen",
-    description: "Hand-thrown matte black ceramic dripper.",
-  },
-  {
-    id: "3",
-    name: "Walnut Desk Organizer",
-    price: 112,
-    image: "/images/product-3.jpg",
-    category: "Office",
-    description: "Solid walnut organizer with divided compartments.",
-  },
-  {
-    id: "4",
-    name: "Linen Throw Blanket",
-    price: 95,
-    image: "/images/product-4.jpg",
-    category: "Home",
-    description: "Stonewashed European linen in warm oatmeal hue.",
-  },
-  {
-    id: "5",
-    name: "Geometric Candle Holder",
-    price: 48,
-    image: "/images/product-5.jpg",
-    category: "Home",
-    description: "Brass and glass with modern geometric silhouette.",
-  },
-  {
-    id: " 6",
-    name: "Stoneware Mug Set",
-    price: 72,
-    image: "/images/product-6.jpg",
-    category: "Kitchen",
-    description: "Set of two hand-glazed stoneware mugs.",
-  },
-]
-
-const CART_ITEMS: CartItem[] = [
-  {
-    product: ITEMS[0],
-    quantity: 1
-  },
-  {
-    product: ITEMS[1],
-    quantity: 1
-  },
-  {
-    product: ITEMS[2],
-    quantity: 1
-  },
-  {
-    product: ITEMS[3],
-    quantity: 1
-  }
-]
-
-const useCheckoutForm = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>(CART_ITEMS)
+const useCheckoutForm = (initialCartItems: CartItem[]) => {
+  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems)
   const [guestInfo, setGuestInfo] = useState<GuestInfo>({
     name: "",
     email: "",
@@ -88,6 +18,33 @@ const useCheckoutForm = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [deliveryNotes, setDeliveryNotes] = useState('');
+  const [isLoadingPrices, setIsLoadingPrices] = useState(true)
+  const [serverTotal, setServerTotal] = useState<number | null>(null)
+  const [orderId, setOrderId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (initialCartItems.length === 0) {
+      return
+    }
+    preCheckout(initialCartItems)
+      .then((order) => {
+        setCartItems((prev) =>
+          prev.map((cartItem) => {
+            const serverItem = order.items.find((i) => i.productId === cartItem.product.id)
+            if (serverItem) {
+              return { ...cartItem, product: { ...cartItem.product, price: serverItem.price } }
+            }
+            return cartItem
+          })
+        )
+        setServerTotal(order.totalAmount)
+        setOrderId(order.orderId)
+      })
+      .catch(() => {
+        toast.error('No se pudo verificar el precio de los productos. Intenta nuevamente.', { position: 'bottom-right' })
+      })
+      .finally(() => setIsLoadingPrices(false))
+  }, [initialCartItems])
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((sum, item) =>
@@ -101,13 +58,7 @@ const useCheckoutForm = () => {
   }
 
 
-  // 2. Memoize Total 
-  // Depends on subtotal (which depends on cartItems)
-  const total = useMemo(() => {
-    const tax = subtotal * 0; // 100% tax based on your snippet logic
-    const shipping = cartItems.length > 0 ? 0 : 0;
-    return subtotal + tax + shipping;
-  }, [subtotal, cartItems.length])
+  const total = serverTotal ?? subtotal
 
   const handleRemoveCartItem = (productId: string, quantity: number) => {
     setCartItems((prevItems) => {
@@ -162,45 +113,30 @@ const useCheckoutForm = () => {
   }
 
   const handleConfirmCheckout = () => {
-
     if (validateForm()) {
       return;
     }
-    // Prepare order data for backend
-    const orderData = {
-      payer: guestInfo.name,
-      email: guestInfo.email,
-      phone: guestInfo.phone,
-      location: deliveryLocation,
-      deliveryNotes: deliveryNotes,
-      address: address,
-      items: cartItems.map((item) => ({
-        productId: item.product.id,
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-      })),
-    }
+
     setIsSubmitting(true);
 
-    setTimeout(() => {
-
-      axios.post('http://localhost:8080/checkout', orderData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-        const { ok, initPoint } = response.data;
-        if (ok && initPoint) {
-          window.location.href = initPoint;
-        } else {
-          toast.error('Hubo un problema al intentar procesar tu orden. Intenta nuevamente más tarde', { position: "bottom-right" })
-        }
-      }).catch((err) => {
-        toast.error('Hubo un problema al intentar procesar tu método de pago. Intenta nuevamente más tarde', { position: "bottom-right" })
-        console.log("req failed: ", err);
-      }).finally(() => setIsSubmitting(false));
-    }, 1500)
+    applyCheckout({
+      email: guestInfo.email,
+      payer: guestInfo.name,
+      orderId: orderId!,
+      address,
+      location: {
+        type: 'Point',
+        coordinates: [deliveryLocation!.lng, deliveryLocation!.lat],
+      },
+      deliveryNotes,
+    })
+      .then(({ checkoutUrl }) => {
+        window.location.href = checkoutUrl;
+      })
+      .catch(() => {
+        toast.error('Hubo un problema al intentar procesar tu método de pago. Intenta nuevamente más tarde', { position: 'bottom-right' })
+      })
+      .finally(() => setIsSubmitting(false));
   }
 
   const validateForm = () => {
@@ -236,9 +172,9 @@ const useCheckoutForm = () => {
     cartItems,
     errors,
     isSubmitting,
+    isLoadingPrices,
     guestInfo,
     address,
-
 
     subtotal,
     total,
